@@ -4,10 +4,13 @@ type Wave = OscillatorType;
 const midi = (n: number) => 440 * Math.pow(2, (n - 69) / 12);
 
 // Note names → midi helper
-const N: Record<string, number> = {};
-["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"].forEach((name, i) => {
-  for (let o = 1; o <= 7; o++) N[`${name}${o}`] = 12 * (o + 1) + i;
-});
+const NAMES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+/** "C5" → frequency in Hz */
+const hz = (note: string) => {
+  const m = /^([A-G]#?)(\d)$/.exec(note);
+  if (!m) return 440;
+  return midi(12 * (Number(m[2]) + 1) + NAMES.indexOf(m[1] ?? "A"));
+};
 
 const MELODY = (
   "C5 E5 G5 E5 A5 G5 E5 C5 D5 F5 A5 F5 G5 - G5 - " +
@@ -65,18 +68,18 @@ class Chiptune {
   }
   coin() {
     const t = this.now();
-    this.tone(midi(N.B5), t, 0.08, "square", 0.4);
-    this.tone(midi(N.E6), t + 0.08, 0.4, "square", 0.4);
+    this.tone(hz("B5"), t, 0.08, "square", 0.4);
+    this.tone(hz("E6"), t + 0.08, 0.4, "square", 0.4);
   }
   bump() {
     this.tone(140, this.now(), 0.1, "triangle", 0.8, 80);
   }
   blip() {
-    this.tone(midi(N.A5), this.now(), 0.03, "square", 0.15);
+    this.tone(hz("A5"), this.now(), 0.03, "square", 0.15);
   }
   sparkle() {
     const t = this.now();
-    ["E6", "G6", "B6", "E7"].forEach((n, i) => this.tone(midi(N[n]), t + i * 0.07, 0.2, "triangle", 0.4));
+    ["E6", "G6", "B6", "E7"].forEach((n, i) => this.tone(hz(n), t + i * 0.07, 0.2, "triangle", 0.4));
   }
 
   fanfare() {
@@ -93,19 +96,19 @@ class Chiptune {
     let cur = t;
     runs.forEach((run, r) => {
       run.forEach((n) => {
-        this.tone(midi(N[n]), cur, trip * 0.9, "square", 0.4);
-        this.tone(midi(N[n]) / 2, cur, trip * 0.9, "triangle", 0.5);
+        this.tone(hz(n), cur, trip * 0.9, "square", 0.4);
+        this.tone(hz(n) / 2, cur, trip * 0.9, "triangle", 0.5);
         cur += trip;
       });
-      this.tone(midi(N[holds[r]]), cur, 0.55, "square", 0.4);
-      this.tone(midi(N[holds[r]]) / 4, cur, 0.55, "triangle", 0.6);
+      this.tone(hz(holds[r] ?? "C6"), cur, 0.55, "square", 0.4);
+      this.tone(hz(holds[r] ?? "C6") / 4, cur, 0.55, "triangle", 0.6);
       cur += 0.6;
     });
     ["C7", "C7", "C7"].forEach((n, i) => {
-      this.tone(midi(N[n]), cur + i * 0.14, 0.12, "square", 0.4);
+      this.tone(hz(n), cur + i * 0.14, 0.12, "square", 0.4);
     });
-    this.tone(midi(N.C7), cur + 0.45, 1.2, "square", 0.4);
-    this.tone(midi(N.C3), cur + 0.45, 1.2, "triangle", 0.7);
+    this.tone(hz("C7"), cur + 0.45, 1.2, "square", 0.4);
+    this.tone(hz("C3"), cur + 0.45, 1.2, "triangle", 0.7);
     window.setTimeout(() => this.startMusic(), (cur - t + 4) * 1000);
   }
 
@@ -118,11 +121,11 @@ class Chiptune {
       if (!this.ctx) return;
       while (this.nextNoteTime < this.now() + 0.2) {
         const i = this.stepIndex % MELODY.length;
-        const note = MELODY[i];
-        if (note !== "-") this.tone(midi(N[note]), this.nextNoteTime, eighth * 0.85, "square", 0.22);
+        const note = MELODY[i] ?? "-";
+        if (note !== "-") this.tone(hz(note), this.nextNoteTime, eighth * 0.85, "square", 0.22);
         if (i % 2 === 0) {
           const bass = BASS[(i / 2) % BASS.length];
-          this.tone(midi(N[bass]), this.nextNoteTime, eighth * 1.6, "triangle", 0.5);
+          this.tone(hz(bass ?? "C3"), this.nextNoteTime, eighth * 1.6, "triangle", 0.5);
         }
         this.nextNoteTime += eighth;
         this.stepIndex++;
