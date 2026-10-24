@@ -105,3 +105,13 @@ export const HEART: SpriteDef = {
   palette: { R: "var(--heart)", W: "var(--sp-white)", D: "var(--heart-dark)" },
   rows: [".RR.RR.", "RWRRRRR", "RRRRRRR", "RRRRRRD", ".RRRRD.", "..RRD..", "...D..."],
 };
+
+const ICON = { W: "var(--hud)", K: "var(--ink)" };
+export const SOUND_ON: SpriteDef = {
+  palette: ICON,
+  rows: ["...W.....", "..WW..W..", "WWWW...W.", "WWWW.W.W.", "WWWW.W.W.", "WWWW...W.", "..WW..W..", "...W....."],
+};
+export const SOUND_OFF: SpriteDef = {
+  palette: ICON,
+  rows: ["...W.....", "..WW.....", "WWWW.W.W.", "WWWW..W..", "WWWW..W..", "WWWW.W.W.", "..WW.....", "...W....."],
+};

@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
-import { Volume2, VolumeX } from "lucide-react";
 
 import castleImg from "@/assets/castle.png";
 import { chiptune } from "@/game/audio";
@@ -20,7 +19,7 @@ import {
   WORLD_W,
 } from "@/game/level";
 import { initialPlayer, step, type Input, type PlayerState } from "@/game/physics";
-import { HEART, MARIO_HAPPY, MARIO_STAND, PEACH_A, PEACH_B } from "@/game/sprites";
+import { HEART, MARIO_HAPPY, MARIO_STAND, PEACH_A, PEACH_B, SOUND_OFF, SOUND_ON } from "@/game/sprites";
 import { PixelSprite } from "./PixelSprite";
 
 type Phase = "title" | "play" | "meet" | "ask" | "yes";
@@ -489,7 +488,7 @@ export function MarioProposal() {
               setMuted(!muted);
             }}
           >
-            {muted ? <VolumeX className="size-5" /> : <Volume2 className="size-5" />}
+            <PixelSprite sprite={muted ? SOUND_OFF : SOUND_ON} width={22} />
           </button>
         </div>
 
