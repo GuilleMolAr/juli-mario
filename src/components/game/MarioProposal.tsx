@@ -30,7 +30,7 @@ const QUESTION =
   "Estaría bueno que llevemos esta relación a otro nivel juntos.\n\n" +
   "¿Querés ser mi novia, Juli?";
 
-const NO_LABELS = ["NO", "¿SEGURA?", "MMM... NO", "¡NI LO INTENTES!", "DALE, TOCÁ SÍ"];
+const NO_LABELS = ["No", "¿Segura?", "Mmm... no", "¡Ni lo intentes!", "Dale, tocá Sí"];
 
 interface Pop {
   id: number;
@@ -313,7 +313,7 @@ export function MarioProposal() {
     <main className="flex h-dvh w-full flex-col items-center justify-center gap-2 overflow-hidden bg-background p-2 sm:p-4">
       <div
         ref={frameRef}
-        className="relative w-full max-w-[1100px] flex-1 min-h-0 max-h-[min(700px,135vw)] overflow-hidden rounded-xl border-4 border-frame sky-gradient select-none"
+        className="relative w-full max-w-[1100px] flex-1 min-h-0 max-h-[min(700px,160vw)] overflow-hidden rounded-xl border-4 border-frame sky-gradient select-none"
       >
         {/* ---------- WORLD ---------- */}
         <div
@@ -433,7 +433,7 @@ export function MarioProposal() {
 
           {/* Mario (Guillermo) */}
           <div className="absolute" style={{ left: MARIO_X, top: GROUND_Y - MARIO_H, width: MARIO_W, height: MARIO_H }}>
-            <NameTag label="GUILLERMO" />
+            {(phase === "title" || phase === "play" || phase === "meet") && <NameTag label="GUILLERMO" />}
             <div className={phase === "yes" ? "animate-hop" : phase === "meet" ? "animate-hop-once" : "animate-idle-bob"}>
               <PixelSprite
                 sprite={phase === "yes" ? MARIO_HAPPY : MARIO_STAND}
@@ -448,15 +448,15 @@ export function MarioProposal() {
           {loveHeart && (
             <div
               className="animate-love-pop absolute"
-              style={{ left: (pl.x + PEACH_W + MARIO_X) / 2 - 20, top: GROUND_Y - MARIO_H - 70 }}
+              style={{ left: (pl.x + PEACH_W + MARIO_X) / 2 - 18, top: GROUND_Y - MARIO_H - 50 }}
             >
-              <PixelSprite sprite={HEART} width={40} />
+              <PixelSprite sprite={HEART} width={36} />
             </div>
           )}
 
           {/* Peach (Juli) */}
           <div className="absolute" style={{ left: pl.x, top: pl.y, width: PEACH_W, height: PEACH_H }}>
-            <NameTag label="JULI" />
+            {(phase === "title" || phase === "play" || phase === "meet") && <NameTag label="JULI" />}
             <div className={phase === "yes" ? "animate-hop [animation-delay:0.25s]" : ""}>
               <PixelSprite sprite={peachSprite} width={PEACH_W} flip={pl.facing === -1} title="Juli como Peach" />
             </div>
@@ -495,7 +495,7 @@ export function MarioProposal() {
         {(showHint || showIdleHint) && (
           <div className="pointer-events-none absolute inset-x-0 top-[22%] z-10 text-center font-pixel text-[clamp(9px,2.2vw,14px)] leading-loose text-hud text-hud-shadow">
             <span className="animate-blink">
-              {showIdleHint ? "MANTENÉ ▶ PARA CAMINAR" : "¡LLEVÁ A JULI HASTA GUILLERMO! ▶"}
+              {showIdleHint ? "Mantené >> para caminar" : "¡Llevá a Juli hasta Guillermo! >>"}
             </span>
           </div>
         )}
@@ -507,7 +507,7 @@ export function MarioProposal() {
             style={{
               left: bubbleLeft,
               width: bubbleW,
-              bottom: size.h - marioHeadY + 26,
+              bottom: size.h - marioHeadY + 60 * scale + 26,
             }}
           >
             <p className="min-h-[7em] whitespace-pre-wrap text-[clamp(9px,2.4vw,13px)] leading-[2] tracking-wide">
@@ -522,7 +522,7 @@ export function MarioProposal() {
                   style={yesScale}
                   onClick={sayYes}
                 >
-                  SÍ
+                  Sí
                 </button>
                 {noPos === null && noButton}
               </div>
@@ -556,7 +556,7 @@ export function MarioProposal() {
               JULI <PixelSprite sprite={HEART} width={22} /> GUILLERMO
             </p>
             <p className="animate-banner-in text-[clamp(9px,2.2vw,14px)] leading-loose text-hud text-hud-shadow [animation-delay:0.9s] opacity-0">
-              ¡HAS GANADO UN CORAZÓN!
+              ¡Has ganado un corazón!
             </p>
           </div>
         )}
@@ -571,17 +571,17 @@ export function MarioProposal() {
               </h1>
             </div>
             <p className="text-[clamp(9px,2vw,13px)] leading-loose text-hud text-hud-shadow">
-              UNA MISIÓN DE AMOR PARA JULI
+              Una misión de amor para Juli
             </p>
             <button
               type="button"
               onClick={start}
               className="pixel-btn bg-primary px-7 py-4 text-[clamp(12px,3vw,18px)] text-primary-foreground"
             >
-              <span className="animate-blink">▶</span> START
+              START
             </button>
             <p className="mouse-only text-[clamp(8px,1.6vw,11px)] leading-loose text-hud text-hud-shadow">
-              ← → CAMINAR · ESPACIO SALTAR
+              Flechas: caminar · Espacio: saltar
             </p>
           </div>
         )}
@@ -613,7 +613,7 @@ export function MarioProposal() {
       </div>
 
       {phase === "play" && (
-        <p className="mouse-only font-pixel text-[10px] text-muted-foreground">← → CAMINAR · ESPACIO SALTAR · M MÚSICA</p>
+        <p className="mouse-only font-pixel text-[10px] text-muted-foreground">Flechas: caminar · Espacio: saltar · M: música</p>
       )}
     </main>
   );
