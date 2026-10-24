@@ -8,3 +8,8 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+## Project rules
+- The game lives in `src/game/` (pure level data, physics, sprites, WebAudio synth) and `src/components/game/` (React rendering); keep physics pure so it stays unit-testable.
+- Characters are hand-authored pixel sprites rendered as SVG from `src/game/sprites.ts`, because image generation refuses these characters.
+- Music and sound effects are synthesized with WebAudio (no audio files) and only start after a user tap, as browsers require.
