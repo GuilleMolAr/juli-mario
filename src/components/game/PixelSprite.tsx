@@ -10,7 +10,7 @@ interface Props {
 }
 
 function PixelSpriteBase({ sprite, width, className, flip, title }: Props) {
-  const cols = sprite.rows[0].length;
+  const cols = sprite.rows[0]?.length ?? 1;
   const rowsN = sprite.rows.length;
   const height = (width / cols) * rowsN;
   const rects: React.ReactNode[] = [];
@@ -18,7 +18,7 @@ function PixelSpriteBase({ sprite, width, className, flip, title }: Props) {
     // merge runs of the same colour to keep the SVG light
     let x = 0;
     while (x < row.length) {
-      const ch = row[x];
+      const ch = row[x] ?? ".";
       let run = 1;
       while (x + run < row.length && row[x + run] === ch) run++;
       const fill = sprite.palette[ch];

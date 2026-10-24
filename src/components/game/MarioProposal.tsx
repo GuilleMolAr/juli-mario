@@ -85,7 +85,9 @@ export function MarioProposal() {
   useEffect(() => {
     const el = frameRef.current;
     if (!el) return;
-    const ro = new ResizeObserver(([entry]) => {
+    const ro = new ResizeObserver((entries) => {
+      const entry = entries[0];
+      if (!entry) return;
       const { width, height } = entry.contentRect;
       setSize({ w: width, h: height });
     });
